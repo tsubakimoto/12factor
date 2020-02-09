@@ -27,8 +27,20 @@ namespace HostApplicationLifetimeSample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime appLifetime, IWebHostEnvironment env)
         {
+            // ホストが完全に起動したとき
+            appLifetime.ApplicationStarted.Register(() => 
+                Console.WriteLine("Application started now..."));
+
+            // ホストが正常なシャットダウンを完了しているとき
+            appLifetime.ApplicationStopped.Register(() => 
+                Console.WriteLine("Application stopped now..."));
+
+            // ホストが正常なシャットダウンを行っているとき
+            appLifetime.ApplicationStopping.Register(() => 
+                Console.WriteLine("Application stopping now..."));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
